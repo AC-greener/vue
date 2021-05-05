@@ -26,10 +26,10 @@ const ALWAYS_NORMALIZE = 2
 // wrapper function for providing a more flexible interface
 // without getting yelled at by flow
 export function createElement (
-  context: Component,
-  tag: any,
+  context: Component,  //vm示例
+  tag: any, //标签 可以是string 也可以是组件
   data: any,
-  children: any,
+  children: any, //子vnode
   normalizationType: any,
   alwaysNormalize: boolean
 ): VNode | Array<VNode> {
@@ -88,7 +88,7 @@ export function _createElement (
     children.length = 0
   }
   if (normalizationType === ALWAYS_NORMALIZE) {
-    children = normalizeChildren(children)
+    children = normalizeChildren(children)  //吧children转换成一维的数组
   } else if (normalizationType === SIMPLE_NORMALIZE) {
     children = simpleNormalizeChildren(children)
   }
@@ -96,7 +96,7 @@ export function _createElement (
   if (typeof tag === 'string') {
     let Ctor
     ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag)
-    if (config.isReservedTag(tag)) {
+    if (config.isReservedTag(tag)) { //是DOM中保留的节点
       // platform built-in elements
       if (process.env.NODE_ENV !== 'production' && isDef(data) && isDef(data.nativeOn) && data.tag !== 'component') {
         warn(
@@ -110,7 +110,7 @@ export function _createElement (
       )
     } else if ((!data || !data.pre) && isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
       // component
-      vnode = createComponent(Ctor, data, context, children, tag)
+      vnode = createComponent(Ctor, data, context, children, tag)    //创建自定义组件
     } else {
       // unknown or unlisted namespaced elements
       // check at runtime because it may get assigned a namespace when its

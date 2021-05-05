@@ -118,6 +118,7 @@ export function mergeDataOrFn (
   }
 }
 
+//如何合并data
 strats.data = function (
   parentVal: any,
   childVal: any,
@@ -238,6 +239,7 @@ strats.watch = function (
 /**
  * Other object hashes.
  */
+//如何合并props methods ...
 strats.props =
 strats.methods =
 strats.inject =
@@ -439,6 +441,7 @@ export function mergeOptions (
  * This function is used because child instances need access
  * to assets defined in its ancestor chain.
  */
+//解析组件 
 export function resolveAsset (
   options: Object,
   type: string,

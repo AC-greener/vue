@@ -30,13 +30,13 @@ export function initExtend (Vue: GlobalAPI) {
       validateComponentName(name)
     }
 
-    const Sub = function VueComponent (options) {
+    const Sub = function VueComponent (options) {   //子组件也是一个Vue
       this._init(options)
     }
     Sub.prototype = Object.create(Super.prototype)
     Sub.prototype.constructor = Sub
     Sub.cid = cid++
-    Sub.options = mergeOptions(
+    Sub.options = mergeOptions(  //合并父子组件的options
       Super.options,
       extendOptions
     )

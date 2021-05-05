@@ -94,7 +94,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     }
   }
 
-  Vue.prototype.$destroy = function () {
+  Vue.prototype.$destroy = function () {  //destroy生命周期
     const vm: Component = this
     if (vm._isBeingDestroyed) {
       return
@@ -138,6 +138,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
   }
 }
 
+//挂载组件  子组件先挂载完毕
 export function mountComponent (
   vm: Component,
   el: ?Element,
@@ -170,23 +171,13 @@ export function mountComponent (
   /* istanbul ignore if */
   if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
     updateComponent = () => {
-      const name = vm._name
       const id = vm._uid
-      const startTag = `vue-perf-start:${id}`
-      const endTag = `vue-perf-end:${id}`
-
-      mark(startTag)
       const vnode = vm._render()
-      mark(endTag)
-      measure(`vue ${name} render`, startTag, endTag)
-
-      mark(startTag)
       vm._update(vnode, hydrating)
-      mark(endTag)
-      measure(`vue ${name} patch`, startTag, endTag)
     }
   } else {
     updateComponent = () => {
+      // vm._render 方法先生成虚拟 Node，最终调用 vm._update 更新 DOM。
       vm._update(vm._render(), hydrating)
     }
   }
@@ -194,6 +185,7 @@ export function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  // noop 表示一个空函数
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted && !vm._isDestroyed) {
@@ -207,7 +199,7 @@ export function mountComponent (
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
     vm._isMounted = true
-    callHook(vm, 'mounted')
+    callHook(vm, 'mounted') //挂载完毕  
   }
   return vm
 }
@@ -334,7 +326,7 @@ export function deactivateChildComponent (vm: Component, direct?: boolean) {
   }
 }
 
-export function callHook (vm: Component, hook: string) {
+export function callHook (vm: Component, hook: string) { //调用钩子函数
   // #7573 disable dep collection when invoking lifecycle hooks
   pushTarget()
   const handlers = vm.$options[hook]

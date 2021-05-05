@@ -33,7 +33,7 @@ import {
 } from 'weex/runtime/recycle-list/render-component-template'
 
 // inline hooks to be invoked on component VNodes during patch
-const componentVNodeHooks = {
+const componentVNodeHooks = {  //组件的hooks  在 patch 的时候会调用
   init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
     if (
       vnode.componentInstance &&
@@ -64,11 +64,11 @@ const componentVNodeHooks = {
     )
   },
 
-  insert (vnode: MountedComponentVNode) {
+  insert (vnode: MountedComponentVNode) {  
     const { context, componentInstance } = vnode
     if (!componentInstance._isMounted) {
       componentInstance._isMounted = true
-      callHook(componentInstance, 'mounted')
+      callHook(componentInstance, 'mounted') //挂载完毕
     }
     if (vnode.data.keepAlive) {
       if (context._isMounted) {
@@ -99,8 +99,8 @@ const componentVNodeHooks = {
 const hooksToMerge = Object.keys(componentVNodeHooks)
 
 export function createComponent (
-  Ctor: Class<Component> | Function | Object | void,
-  data: ?VNodeData,
+  Ctor: Class<Component> | Function | Object | void,  //construcor 构造器
+  data: ?VNodeData,  
   context: Component,
   children: ?Array<VNode>,
   tag?: string
@@ -108,7 +108,7 @@ export function createComponent (
   if (isUndef(Ctor)) {
     return
   }
-
+  //Vue
   const baseCtor = context.$options._base
 
   // plain options object: turn it into a constructor
@@ -116,16 +116,9 @@ export function createComponent (
     Ctor = baseCtor.extend(Ctor)
   }
 
-  // if at this stage it's not a constructor or an async component factory,
-  // reject.
-  if (typeof Ctor !== 'function') {
-    if (process.env.NODE_ENV !== 'production') {
-      warn(`Invalid Component definition: ${String(Ctor)}`, context)
-    }
-    return
-  }
 
-  // async component
+
+  // async component  处理异步组件
   let asyncFactory
   if (isUndef(Ctor.cid)) {
     asyncFactory = Ctor
@@ -150,7 +143,7 @@ export function createComponent (
   // component constructor creation
   resolveConstructorOptions(Ctor)
 
-  // transform component v-model data into props & events
+  // transform component v-model data into props & events  处理v-model
   if (isDef(data.model)) {
     transformModel(Ctor.options, data)
   }
@@ -182,7 +175,7 @@ export function createComponent (
     }
   }
 
-  // install component management hooks onto the placeholder node
+  // install component management hooks onto the placeholder node 组件的钩子函数
   installComponentHooks(data)
 
   // return a placeholder vnode
@@ -194,13 +187,6 @@ export function createComponent (
     asyncFactory
   )
 
-  // Weex specific: invoke recycle-list optimized @render function for
-  // extracting cell-slot template.
-  // https://github.com/Hanks10100/weex-native-directive/tree/master/component
-  /* istanbul ignore if */
-  if (__WEEX__ && isRecyclableComponent(vnode)) {
-    return renderRecyclableComponentTemplate(vnode)
-  }
 
   return vnode
 }

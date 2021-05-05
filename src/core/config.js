@@ -34,7 +34,7 @@ export type Config = {
   // legacy
   _lifecycleHooks: Array<string>;
 };
-
+//合并策略 mixin
 export default ({
   /**
    * Option merge strategies (used in core/util/options)
